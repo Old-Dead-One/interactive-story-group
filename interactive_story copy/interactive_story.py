@@ -240,8 +240,10 @@ def chapter_one(speak_enabled):                                 ### Primary util
             declining_choice(speak_enabled)
             return False  # End the story after declining
 
+### Main function call
+        
 def main():  
-    print()                                                   ### Main function call
+    print()                                                   
     print("KRONUS GATE")
     print()
     print("Chapter One")
