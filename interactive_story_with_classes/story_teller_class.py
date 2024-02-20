@@ -114,21 +114,18 @@ class Player(ABC):
     def __init__(self, name : str):
         self.name = name
         self.experience_level =  "Beginner"
+        self.xp_dict = { 
+            "Beginner" : 100,
+            "Intermediate" : 200,
+            "Advanced" : 300
+        }
         self.xp = self.calculate_experience_points(self.experience_level)
    
     def calculate_experience_points(self, level):
         self.experience_level = level
-        xp = 0
-        if level == "Beginner":
-            xp = 100
-        elif level == "Intermediate":
-            xp = 200
-        elif level == "Advanced":
-            xp = 300
-        
-        return xp
+        return self.xp_dict.get(level, 0)
 
-    def set_experience_level(self, level):
+    def set_experience_level(self, level: str):
         self.experience_level = level
         self.xp = self.calculate_experience_points(level)
     
