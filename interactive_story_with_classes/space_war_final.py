@@ -307,25 +307,26 @@ class Game:
         pass
 
     def check_win_lose(self):
-        global game_outcome  # Use the global keyword to access the global variable
+        global game_outcome  # Access the global variable
 
-        if self.player.health <= 0 or self.player.shield <= 0:  # Simplified lose condition
-            self.win_lose_turtle.clear()  # Clear any previous text
+        if self.player.health <= 0 and self.player.shield <= 0:  # Lose condition
+            self.win_lose_turtle.clear()
             self.win_lose_turtle.write("You lose!", align="center", font=("Courier", 24, "normal"))
-            game_outcome = "lose"  # Directly set the global variable to "lose"
+            game_outcome = "lose"  # Set the global variable to "lose"
+            #self.win.update()
             self.end_game()  # Call end_game to handle game over logic
-        elif self.score.score >= 100:  # Assuming this is the win condition
+        elif self.score.score >= 100:  # Reset this back to 1000 after testing
             self.win_lose_turtle.clear()  # Clear any previous text
             self.win_lose_turtle.write("You win!", align="center", font=("Courier", 24, "normal"))
             game_outcome = "win"  # Directly set the global variable to "win"
+            #self.win.update()
             self.end_game()  # Call end_game to handle game over logic
 
     def end_game(self):
-        if self.game_over:  # Prevent multiple calls to this function
-            return
+        #if self.game_over:  # Prevent multiple calls to this function
+         #   return
         self.game_over = True  # Mark the game as over
         
-        # It's important to disable key bindings here to prevent further input.
         self.win.onkeypress(None, "Up")
         self.win.onkeypress(None, "Down")
         self.win.onkeypress(None, "Left")
@@ -335,6 +336,7 @@ class Game:
         self.close_game()  # Proceed to close the game window
 
     def close_game(self):
+        self.win.update()  # Update the window to display the win/lose message
         time.sleep(2)  # Short delay to ensure the message is readable
         self.win.bye()  # Close the Turtle graphics window
 
@@ -360,6 +362,7 @@ class Game:
 
             if not self.game_over:  # Check if the game is over before updating the window
                 self.win.update()
+
 
             elapsed_time = time.time() - start_time
             if elapsed_time < frame_period:
