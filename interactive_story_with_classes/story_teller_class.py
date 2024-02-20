@@ -2,10 +2,12 @@
 import time
 import textwrap
 import threading
-from playsound import playsound
+# from playsound import playsound
 from story_content_class_1 import Story_Content
 from space_war_final import show_intro_and_wait, game_outcome
 import turtle
+
+from abc import ABC, abstractmethod
 
 # Story Teller
 
@@ -101,11 +103,49 @@ class Story_Teller:
             if next_part:
                 self.process_story_part(next_part)  # Recursively process the next part of the story
 
+    @abstractmethod
+    def calculate_experience_points(self,level):
+        "calculates experience points based on the level of the player"
+        pass    
+        
+class Player(ABC):
+
+
+    def __init__(self, name : str):
+        self.name = name
+        self.experience_level =  "Beginner"
+        self.xp = self.calculate_experience_points(self.experience_level)
+   
+    def calculate_experience_points(self, level):
+        self.experience_level = level
+        xp = 0
+        if level == "Beginner":
+            xp = 100
+        elif level == "Intermediate":
+            xp = 200
+        elif level == "Advanced":
+            xp = 300
+        
+        return xp
+
+    def set_experience_level(self, level):
+        self.experience_level = level
+        self.xp = self.calculate_experience_points(level)
+    
+    def get_player_name(self):
+        return self.name
+
+    def displayexperience_points(self):
+        input(f"Player Name: {self.name}")
+        print(f"Experience Level: {self.experience_level}")
+        print(f"Experience Points: {self.xp}")
 # Main function
 
 def main():
     print("Welcome to KRONUS GATE\n")
     
+    name = input("Enter the name of the player: ")
+    player = Player(name)
     # Initialize Story_Content and Story_Teller
     story_content = Story_Content()
     story_teller = Story_Teller(story_content)
@@ -117,6 +157,11 @@ def main():
     text, audio, choices = story_content.legendary_traveler()
     story_teller.print_formatted_paragraphs(text, audio)
     decision = story_teller.make_choice(*choices)
+    
+    
+    
+    player.set_experience_level("Beginner")
+    player.displayexperience_points()
 
     if decision == 1:
         show_intro_and_wait()
@@ -139,12 +184,24 @@ def main():
         story_teller.print_formatted_paragraphs(text, audio)
 
     # Introduction
+    
+    
+    player.set_experience_level("Intermediate")
+    player.displayexperience_points()
     text, audio, _ = story_content.introduction()
     story_teller.print_formatted_paragraphs(text, audio)
     
+
+
     # Cell Description
+    
+    
+    player.set_experience_level("Advanced")
+    player.displayexperience_points()
     text, audio, _ = story_content.cell_description()
     story_teller.print_formatted_paragraphs(text, audio)
+    
+   
     
     # Mysterious Visitor with a choice
     text, audio, choices = story_content.mysterious_visitor()
