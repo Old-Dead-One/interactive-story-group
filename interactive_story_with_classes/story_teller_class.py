@@ -4,6 +4,8 @@ import textwrap
 import threading
 from playsound import playsound
 from story_content_class_1 import Story_Content
+from space_war_final import show_intro_and_wait, game_outcome
+import turtle
 
 # Story Teller
 
@@ -56,7 +58,7 @@ class Story_Teller:
     def slow_print(self, text):
         for character in text:
             print(character, end='', flush=True)
-            time.sleep(.0125) # .0625 is the best setting for a good reading speed
+            time.sleep(.0025) # .0625 is the best setting for a good reading speed
         print()
 
     def make_choice(self, prompt, options):
@@ -99,7 +101,6 @@ class Story_Teller:
             if next_part:
                 self.process_story_part(next_part)  # Recursively process the next part of the story
 
-
 # Main function
 
 def main():
@@ -110,12 +111,33 @@ def main():
     story_teller = Story_Teller(story_content)
 
     # Enable or disable audio narration based on user choice
-    story_teller.speak_enabled = story_teller.get_user_choice_speak()
-
-    # This is where addition story parts can be added and called based on user choices to combine our two stories
-    #text, audio, _ = story_content.thank_elf()
-    #story_teller.print_formatted_paragraphs(text, audio)   
+    story_teller.speak_enabled = story_teller.get_user_choice_speak()   
     
+    # Legendary Traveler
+    text, audio, choices = story_content.legendary_traveler()
+    story_teller.print_formatted_paragraphs(text, audio)
+    decision = story_teller.make_choice(*choices)
+
+    if decision == 1:
+        show_intro_and_wait()
+        turtle.mainloop()
+        if game_outcome == "win":
+            # Win the mini game
+            text, audio, _ = story_content.help_elves_win()
+            story_teller.print_formatted_paragraphs(text, audio)
+            
+            text, audio, _ = story_content.life_in_aarondor()
+            story_teller.print_formatted_paragraphs(text, audio)
+        elif game_outcome == "lose":
+            # Lose the mini game
+            text, audio, _ = story_content.help_elves_lose()
+            story_teller.print_formatted_paragraphs(text, audio)
+
+    elif decision == 2:
+        # Refuse to help the elves
+        text, audio, _ = story_content.refuse_aid()
+        story_teller.print_formatted_paragraphs(text, audio)
+
     # Introduction
     text, audio, _ = story_content.introduction()
     story_teller.print_formatted_paragraphs(text, audio)

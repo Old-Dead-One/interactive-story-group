@@ -4,58 +4,115 @@ class Story_Content:
     def __init__(self):
         pass
 
-    def legendary_traveler(self):                          ### Prologue content
-        text = [
-            "In the depths of space, you are hailed as a legendary traveler and warrior, commanding a highly advanced spaceship. "
-            "During an expedition, disaster struck as your ship was sucked into a wormhole. You initiated cryosleep, hoping to survive. "
-            "After drifting in space for some time you are awoken by your ships AI Spilo, you find your ship damaged but repairable. "
-            "Trying to survive Spilo helps you land on a nearby planet inhabited by elf-like beings, known as the kingdom of Aarondor. "
-            "They help repair your ship, but a looming threat of Orcish invasion hangs over the kingdom. "
-            "The rulers, grateful for your assistance, ask for your aid in combat, promising further assistance in fixing your ship once the threat is vanquished."
-        ]
-        audio = "legendary_traveler.mp3"
-        choices = ("Do you:", ["Accept the offer and help the kingdom", "Refuse and leave the planet"])
-        return text, None, choices # need to add the audio file here
-
-    def help_elves_win(self):                              ### Help the elves win content
-        text = [
-            "After the battle, hailed as a hero for your pivotal role in saving Aarondor from the orcish invasion, you are celebrated as a savior of the kingdom. "
-            "Although you are rewarded with land, titles, and money you are left stranded, as your ship was irreparably damaged in the war. "
-            "Despite the warm welcome and gratitude from the inhabitants, you can't shake the nagging feeling that something is off and you fear you have been deceived. "
-        ]
-        audio = "help_elves_win.mp3"
-        return text, None, None
-
-    def refuse_aid(self):                                  ### Refuse to help the elves content
-        text = ["You distrust the elf's motives and refuse to be a pawn. As you desperately try and escape the elves seize your ship, "
-                "imprison you, and erase you from their history."
-        ]
-        return text, None, None
+    
+    def listen_to_space_crash(self):
         
-    def help_elves_lose(self):                             ### Help the elves lose content
-        text = [
-            "Despite your valiant efforts, the war against the orc invaders proves futile, ending in defeat for Aarondor's forces. "
-            "Amidst the chaos of battle, you are captured by the victorious orcs and branded a war criminal for your role in resisting their conquest. "
-            "Bound by chains and stripped of freedom, you are imprisoned within the dark confines of their stronghold, "
-            "your hopes of redemption further obscured by the shadow of defeat. Yet, even in captivity, the flames of determination flicker within you, "
-            "driving you to seek a path to redemption and liberation, even amidst the direst of circumstances."
+        text =  [ 
+            f"Captain {self.name}, greetings. It's Spilo, your built-in AI within the space suit. I must relay"
+            "crucial information: After centuries of space travel, we've crash-landed through an interdimensional"
+            "wormhole. We find ourselves in an unfamiliar realm, inhabited by elf-like beings. Currently situated"
+            "in an elf home, they've used their magic to heal your injuries. I've analyzed our surroundings and"
+            "devised an escape plan."
         ]
-        audio = "help_elves_lose.mp3"
-        return text, None, None
-
-    def life_in_aarondor(self):                            ### Life in Aarondor content
-        text = [
-            "Unable to leave the planet, you integrate into Aarondor's society and the disheartening realization dawns upon you: "
-            "you unknowingly fought for a corrupt regime reminiscent of the orc invaders. Motivated by a longing for redemption and justice, "
-            "you embark on a quest to uncover ancient magic and relics rumored to offer a glimmer of hope amidst the prevailing despair. "
-            "However, your relentless pursuit of truth and power does not escape the notice of the ruling elite, who perceive your actions as a threat to their authority. "
-            "Yet, beneath the surface lies a deeper truth: an ancient curse has kept Aarondor locked in a state of perpetual war for millennia. "
-            "Your quest for the elusive relics and magic becomes not only a means of redemption but also a potential key to breaking the curse, "
-            "bringing an end to the cycle of strife that has plagued the land for so long. "
-            "Betrayed by informants, you find yourself branded as a heretic and rebel. Ultimately you are apprehended and imprisoned."
+        audio = "spacecrash.mp3"
+        choices = ("Do you:" , ["Thank elf", "Escape"])
+        return text, audio, choices
+        
+    def escape_window(self):
+        text =[
+            "With a swift motion, you rise and dash towards the window,"
+            "propelled by resolve. Fearless, you burst through, landing" 
+            "gracefully before sprinting into the forest's embrace, a blur"
+            "of motion. Encouraged by your AI Spilo, you embrace departure,"
+            "fleeing the planet's confines with purpose."
         ]
-        audio = "life_in_aarondor.mp3"
+        audio = "escape.mp3"
         return text, audio, None
+    
+    
+    def thank_elf(self):
+        text = [ 
+        "In the tranquil ambiance of an elf home's park,"
+        "gratitude flows as you thank the hospitable elf."
+        "Suddenly, a sheriff elf approaches, inquisitive"
+        "about your presence. Queries arise about your origins"
+        "and intentions, all under the watchful eye of the elf"
+        "governor. An audience with him beckons, veiled in mystery" 
+        "and significance, amid the serene surroundings."
+        ]
+        audio = "thank_elf.mp3"
+        choices = ("Do you:", [" speak to governor ", "decline governor"])
+        return text, audio, choices
+    
+    def speak_to_governor(self):
+        
+        text = [
+        "The Governor's gaze falls upon you, beseeching, as he unravels"
+          "the planet's tumultuous history. Centuries of conflict with the "
+          "neighboring Orc planet have stained the annals of time. Yet, in"
+          "the midst of darkness, a beacon of hope emerges - your arrival. "
+          "With technological prowess unmatched, you possess the means to tip"
+            "the scales of war in their favor. A formidable weapon rests within "
+            "your spacecraft, a nuclear force capable of decimating the Orc stronghold."
+              "The Governor's plea hangs in the air, a silent plea for salvation."
+        "Faced with the weight of destiny, the choice looms before you like a specter. "
+        "Do you succumb to the call of destruction, unleashing the fury of war upon the "
+        "Orc kingdom? Or do you dare to defy fate, seeking a path of peace amidst the chaos?"
+          "The future of two worlds rests upon your shoulders, awaiting your decision."
+        ]        
+        audio = "accept_governor_request.mp3"
+        choices = ("Do you:", ["fight orcs", "decline fight"])
+        return text, audio, choices
+    
+    def decline_governor_and_go_to_jail(self):
+        text = [
+            "With unwavering conviction, you dismiss the governor's summons," 
+            "refusing to engage in discourse. Ignoring the consequences looming" 
+            "ahead, you brace yourself for the inevitable. As guards move to apprehend you," 
+            "a calm descends upon your being, accepting the path of defiance. With resolute"
+            "steps, you walk towards confinement, a silent testament to the power of steadfast"
+            "resolve amidst adversity."
+            ]
+        audio = "decline_fight.mp3"
+        return text, audio, None
+
+    def decline_orc_fight_go_to_jail(self):
+        text = [
+            "You resist engaging in the Orc conflict. However, the governor's"
+            "intentions diverge. Branded a traitor, you face immediate consequences,"
+              "whisked away to the dungeons of the elf jail."
+        ]
+        audio = "decline_fight.mp3"
+        return text, audio, None
+    
+    def fight_orcs_then_go_to_jail(self):
+    
+        text  = [
+                "Accepting the invitation to war,"
+                "you launch into space aboard your "
+            " spaceship. Amidst the battle, you unleash "
+                "a devastating nuclear strike on the orcs. "
+                "Unknown to you, it was always the governor's "
+                "plan to betray you, sentencing you to jail after the conflict.",
+            
+    
+                "Little did you know,  the governor harbors a dark secret—a clandestine"
+                "plot to betray you despite your invaluable aid. With unwavering determination."
+                "The elf militaryads his forces into the galactic space battle, deploying the"
+                "nuclear bomb entrusted to the marines stealth team. The devastating explosion "
+                "anihalates the Orc kingdom, securing a decisive victory for the elves. Atlast"
+                "victory smells so sweet.Yet, amidst the triumph, betrayal lurks in the shadows,"
+                "waiting to strike with venomous intent. As the echoes of war fade into the distance."
+                "The entire time you were being used as a pawn in the governor's sinister game. He was"
+                "always planning on sending you to prison after the war.You find yourself shackled, "
+                "branded a traitor by the very one she sought to aid. The governor's deceitful machinations "
+                "come to fruitionas you languish in a cell, betrayed and forsaken, your trust shattered like"
+                "glass against the cold, unforgiving truth of betrayal."
+        ]
+        
+        audio = "betrayal.mp3"
+        return text, audio, None
+
 
     def introduction(self):                                ### Introduction to the story
         text = [       

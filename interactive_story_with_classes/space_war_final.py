@@ -2,6 +2,8 @@ import turtle
 import random
 import time
 
+game_outcome = None  # Global variable to store the outcome of the game
+
 def show_intro_and_wait():
     screen = turtle.Screen()
     screen.setup(width=1440, height=900)
@@ -187,7 +189,7 @@ class Game:
             sprite.start_position()
         
         self.max_speed = 3
-        self.min_rocket_speed = 4
+        self.min_rocket_speed = 5
         self.rocket_delay = 0.25
         self.last_rocket_time = 0
 
@@ -203,9 +205,12 @@ class Game:
 
         self.game_over = False
 
+        self.win_lose_turtle = turtle.Turtle()  # Create the win_lose_turtle object here
+        self.win_lose_turtle.hideturtle()
+        self.win_lose_turtle.color("white")
+
         self.setup_keyboard_bindings()
         self.win.tracer(0)
-        pass
 
     def setup_keyboard_bindings(self):
         self.win.listen()
@@ -302,60 +307,59 @@ class Game:
         pass
 
     def check_win_lose(self):
-        win_lose_turtle = turtle.Turtle()
-        win_lose_turtle.hideturtle()
-        win_lose_turtle.color("white")
+        global game_outcome  # Use the global keyword to access the global variable
 
-        if self.player.health <= 0 and self.player.shield <= 0:
-            win_lose_turtle.write("You lose!", align="center", font=("Courier", 24, "normal"))
-            self.player.hideturtle()
-            self.game_over = True
-        elif self.score.score >= 1000 and not self.game_over:
-            win_lose_turtle.write("You win!", align="center", font=("Courier", 24, "normal"))
-            self.player.hideturtle()
-            self.game_over = True
-        return self.game_over
+        if self.player.health <= 0 or self.player.shield <= 0:  # Simplified lose condition
+            self.win_lose_turtle.clear()  # Clear any previous text
+            self.win_lose_turtle.write("You lose!", align="center", font=("Courier", 24, "normal"))
+            game_outcome = "lose"  # Directly set the global variable to "lose"
+            self.end_game()  # Call end_game to handle game over logic
+        elif self.score.score >= 100:  # Assuming this is the win condition
+            self.win_lose_turtle.clear()  # Clear any previous text
+            self.win_lose_turtle.write("You win!", align="center", font=("Courier", 24, "normal"))
+            game_outcome = "win"  # Directly set the global variable to "win"
+            self.end_game()  # Call end_game to handle game over logic
 
     def end_game(self):
-        self.game_over = True
-        # self.close_game() I have added this to close the game without a game over message if needed
-        # Disable all key bindings except for the "Escape" key
+        if self.game_over:  # Prevent multiple calls to this function
+            return
+        self.game_over = True  # Mark the game as over
+        
+        # It's important to disable key bindings here to prevent further input.
         self.win.onkeypress(None, "Up")
         self.win.onkeypress(None, "Down")
         self.win.onkeypress(None, "Left")
         self.win.onkeypress(None, "Right")
         self.win.onkeypress(None, "space")
-        # Keep "Escape" key binding to allow closing the game
-        self.win.onkeypress(self.close_game, "Escape")
-        # Additional logic to handle game over state (e.g., displaying a message) can be added here
+        
+        self.close_game()  # Proceed to close the game window
 
     def close_game(self):
-        self.win.bye()
+        time.sleep(2)  # Short delay to ensure the message is readable
+        self.win.bye()  # Close the Turtle graphics window
 
     def game_loop(self):
         frame_rate = 60
         frame_period = 1 / frame_rate
-        while True:
+        while not self.game_over:
             start_time = time.time()
 
-            if not self.game_over:
-                self.display_status()
-                # self.player.movement_speed = self.player_speed
-                self.player.move()
+            self.display_status()
+            self.player.move()
 
-                for sprite in self.sprites:
-                    sprite.move()
+            for sprite in self.sprites:
+                sprite.move()
 
-                for rocket in self.rockets:
-                    if rocket.isvisible():
-                        rocket_speed = max(self.player_speed * 2, self.min_rocket_speed)
-                        # rocket.movement_speed = rocket_speed
-                        rocket.move()
+            for rocket in self.rockets:
+                if rocket.isvisible():
+                    rocket.move()
 
-                self.check_collisions()
-                self.check_win_lose()
+            self.check_collisions()
 
-            self.win.update()
+            self.check_win_lose()  # Check if the player has won or lost
+
+            if not self.game_over:  # Check if the game is over before updating the window
+                self.win.update()
 
             elapsed_time = time.time() - start_time
             if elapsed_time < frame_period:
