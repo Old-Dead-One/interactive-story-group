@@ -312,11 +312,13 @@ class Game:
         if self.player.health <= 0 or self.player.shield <= 0:  # Simplified lose condition
             self.win_lose_turtle.clear()  # Clear any previous text
             self.win_lose_turtle.write("You lose!", align="center", font=("Courier", 24, "normal"))
-            #game_outcome = "lose"  # Directly set the global variable to "lose"
+            self.win.update()  # Ensure the screen updates immediately
+            game_outcome = "lose"  # Directly set the global variable to "lose"
             self.end_game()  # Call end_game to handle game over logic
         elif self.score.score >= 100:  # Assuming this is the win condition
             self.win_lose_turtle.clear()  # Clear any previous text
             self.win_lose_turtle.write("You win!", align="center", font=("Courier", 24, "normal"))
+            self.win.update()  # Ensure the screen updates immediately
             game_outcome = "win"  # Directly set the global variable to "win"
             self.end_game()  # Call end_game to handle game over logic
 
@@ -356,10 +358,10 @@ class Game:
 
             self.check_collisions()
 
-            self.check_win_lose()  # Check if the player has won or lost
-
             if not self.game_over:  # Check if the game is over before updating the window
                 self.win.update()
+
+            self.check_win_lose()  # Check if the player has won or lost                
 
             elapsed_time = time.time() - start_time
             if elapsed_time < frame_period:
