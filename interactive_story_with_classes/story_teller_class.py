@@ -2,15 +2,13 @@
 import time
 import textwrap
 import threading
-# from playsound import playsound
+from playsound import playsound
 from story_content_class_1 import Story_Content
 from space_war_final import show_intro_and_wait, game_outcome
 import turtle
-
 from abc import ABC, abstractmethod
 
 # Story Teller
-
 class Story_Teller:
     def __init__(self, story_content):
         self.story_content = story_content
@@ -40,20 +38,17 @@ class Story_Teller:
         return None
 
     def print_formatted_paragraphs(self, paragraphs, audio_file=None):
-        # Play audio if enabled and file provided
         if self.speak_enabled and audio_file:
             audio_thread = threading.Thread(target=self.play_audio, args=(audio_file,))
             audio_thread.start()
         else:
             audio_thread = None
 
-        # Print each paragraph with text wrapping
         for paragraph in paragraphs:
             wrapped_text = textwrap.fill(paragraph, width=100)
             self.slow_print(wrapped_text)
-            print()  # Print a newline between paragraphs
+            print()
 
-        # Wait for audio to finish if it was started
         if audio_thread:
             audio_thread.join()
 
@@ -61,7 +56,6 @@ class Story_Teller:
         for character in text:
             print(character, end='', flush=True)
             time.sleep(.0025) # .0625 is the best setting for a good reading speed
-        print()
 
     def make_choice(self, prompt, options):
         while True:
@@ -107,13 +101,12 @@ class Story_Teller:
     def calculate_experience_points(self,level):
         "calculates experience points based on the level of the player"
         pass    
-        
+
+# Player class
 class Player(ABC):
-
-
-    def __init__(self, name : str):
+    def __init__(self, name : str, level="Beginner"):
         self.name = name
-        self.experience_level =  "Beginner"
+        self.experience_level = level
         self.xp_dict = { 
             "Beginner" : 100,
             "Intermediate" : 200,
@@ -133,123 +126,133 @@ class Player(ABC):
         return self.name
 
     def displayexperience_points(self):
-        input(f"Player Name: {self.name}")
+        print(f"Player Name: {self.name}")
         print(f"Experience Level: {self.experience_level}")
         print(f"Experience Points: {self.xp}")
-# Main function
 
+# Main function
 def main():
     print("Welcome to KRONUS GATE\n")
     
+    # Initialize Player
     name = input("Enter the name of the player: ")
     player = Player(name)
+    player.displayexperience_points
+    print()
+
     # Initialize Story_Content and Story_Teller
     story_content = Story_Content()
     story_teller = Story_Teller(story_content)
 
     # Enable or disable audio narration based on user choice
     story_teller.speak_enabled = story_teller.get_user_choice_speak()   
-    
+    print()
+
     # Legendary Traveler
     text, audio, choices = story_content.legendary_traveler()
     story_teller.print_formatted_paragraphs(text, audio)
     decision = story_teller.make_choice(*choices)
-    
-    
-    
+    print()
+
+    # Display experience points
     player.set_experience_level("Beginner")
     player.displayexperience_points()
+    print()
 
+    # Help the Elves
     if decision == 1:
         show_intro_and_wait()
         turtle.mainloop()
-        if game_outcome == "win":
-            # Win the mini game
+        if decision == 1:
             text, audio, _ = story_content.help_elves_win()
             story_teller.print_formatted_paragraphs(text, audio)
-            
+            print()
             text, audio, _ = story_content.life_in_aarondor()
             story_teller.print_formatted_paragraphs(text, audio)
+            print()
         elif game_outcome == "lose":
-            # Lose the mini game
             text, audio, _ = story_content.help_elves_lose()
             story_teller.print_formatted_paragraphs(text, audio)
+            print()
 
+    # Refuse to help the Elves
     elif decision == 2:
-        # Refuse to help the elves
         text, audio, _ = story_content.refuse_aid()
         story_teller.print_formatted_paragraphs(text, audio)
+        print()
 
     # Introduction
-    
-    
-    player.set_experience_level("Intermediate")
-    player.displayexperience_points()
     text, audio, _ = story_content.introduction()
     story_teller.print_formatted_paragraphs(text, audio)
-    
-
+    print()
 
     # Cell Description
-    
-    
-    player.set_experience_level("Advanced")
-    player.displayexperience_points()
     text, audio, _ = story_content.cell_description()
     story_teller.print_formatted_paragraphs(text, audio)
-    
-   
-    
+    print()
+        
     # Mysterious Visitor with a choice
     text, audio, choices = story_content.mysterious_visitor()
     story_teller.print_formatted_paragraphs(text, audio)
     decision = story_teller.make_choice(*choices)
-    
+    print()
+
+    # Display experience points
+    player.set_experience_level("Intermediate")
+    player.displayexperience_points()
+    print()
+
+    # Listen to the stranger
     if decision == 1:
-        # Listen to Stranger
         text, audio, _ = story_content.listen_to_stranger()
         story_teller.print_formatted_paragraphs(text, audio)
+        print()
 
+    # Decline to listen to the stranger
     elif decision == 2:
-        # Decline the offer
         text, audio, _ = story_content.declining_choice()
         story_teller.print_formatted_paragraphs(text, audio)
-        # After declining, conclude the story or prompt for restart/end
         print("The story has ended. Thank you for playing.")
         return  # Exit the main function to end the story
 
-    # Time Machine Explanation with a choice
+    # Time Machine Explanation
     text, audio, choices = story_content.time_machine_explanation()
     decision = story_teller.make_choice(*choices)
+    print()
 
+    # Display experience points
+    player.set_experience_level("Advanced")
+    player.displayexperience_points()
+    print()
+
+    # Accept the mission
     if decision == 1:
-        # Accept the mission
-        text, audio, choices = story_content.accept_mission()  # Note: Now expecting choices to be part of the return
+        text, audio, choices = story_content.accept_mission()
         story_teller.print_formatted_paragraphs(text, audio)
-        if choices:  # Check if there are choices as part of accept_mission
+        print()
+
+    # Choices after accepting the mission    
+        if choices:
             secondary_decision = story_teller.make_choice(*choices)
+            print()
             if secondary_decision == 1:
-                # Process the outcome of the first choice
-                # Assuming there's a method to handle this path, e.g., mission_accepted
-                text, audio, _ = story_content.end_of_chapter_one()  # Placeholder for actual method name
+                text, audio, _ = story_content.end_of_chapter_one()
                 story_teller.print_formatted_paragraphs(text, audio)
+                print()
+
+    # Decline final mission choice
             elif secondary_decision == 2:
-                # Process the outcome of the second choice
-                # Assuming there's a method to handle this path, e.g., mission_declined
-                text, audio, _ = story_content.decline_mission()  # Placeholder for actual method name
+                text, audio, _ = story_content.decline_mission()
                 story_teller.print_formatted_paragraphs(text, audio)
-                # After declining, conclude the story or prompt for restart/end
                 print("The story has ended. Thank you for playing.")
                 return  # Exit the main function to end the story
+
+    # Decline the mission
     elif decision == 2:
-        # Decline the mission
         text, audio, _ = story_content.decline_mission()
         story_teller.print_formatted_paragraphs(text, audio)
-        # After declining, conclude the story or prompt for restart/end
         print("The story has ended. Thank you for playing.")
         return  # Exit the main function to end the story
-
-    
 
 if __name__ == "__main__":
     main()

@@ -2,7 +2,7 @@ import turtle
 import random
 import time
 
-game_outcome = None  # Global variable to store the outcome of the game
+game_outcome = True  # Global variable to store the outcome of the game
 
 def show_intro_and_wait():
     screen = turtle.Screen()
@@ -312,7 +312,7 @@ class Game:
         if self.player.health <= 0 or self.player.shield <= 0:  # Simplified lose condition
             self.win_lose_turtle.clear()  # Clear any previous text
             self.win_lose_turtle.write("You lose!", align="center", font=("Courier", 24, "normal"))
-            game_outcome = "lose"  # Directly set the global variable to "lose"
+            #game_outcome = "lose"  # Directly set the global variable to "lose"
             self.end_game()  # Call end_game to handle game over logic
         elif self.score.score >= 100:  # Assuming this is the win condition
             self.win_lose_turtle.clear()  # Clear any previous text
